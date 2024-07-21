@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://c60tvy3hgo56j"]
+
+[ext_resource type="Script" path="res://Script/Player.gd" id="1_jikto"]
+[ext_resource type="Texture2D" uid="uid://53l6irhwd1fa" path="res://assets/rat.png" id="2_05a5v"]
+[ext_resource type="Texture2D" uid="uid://chigyohjc2vt0" path="res://assets/crosshair64.png" id="4_e5nnj"]
+[ext_resource type="Script" path="res://Script/Label.gd" id="5_a7yqq"]
+[ext_resource type="AudioStream" uid="uid://dfedlq7qbv6uv" path="res://assets/untitled.ogg" id="7_o2vm6"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kyr8i"]
+radius = 16.0
+height = 54.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_g6msb"]
+font_size = 25
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+z_index = 5
+collision_mask = 14
+script = ExtResource("1_jikto")
+
+[node name="Rat" type="Node2D" parent="."]
+scale = Vector2(-1, 1)
+
+[node name="Rat" type="Sprite2D" parent="Rat"]
+rotation = 0.514872
+texture = ExtResource("2_05a5v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_kyr8i")
+
+[node name="Crosshair" type="Sprite2D" parent="."]
+z_index = 10
+z_as_relative = false
+texture_filter = 1
+texture = ExtResource("4_e5nnj")
+metadata/_edit_lock_ = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+offset_left = 6.0
+offset_top = 56.0
+offset_right = 239.0
+offset_bottom = 80.0
+color = Color(0, 0, 0, 1)
+
+[node name="EnergyBar" type="ColorRect" parent="CanvasLayer"]
+offset_left = 10.0
+offset_top = 59.0
+offset_right = 235.0
+offset_bottom = 76.0
+color = Color(0, 0.489636, 0.853661, 1)
+
+[node name="Label2" type="Label" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -46.0
+offset_right = 153.0
+offset_bottom = -2.0
+grow_vertical = 0
+text = "FPS: "
+label_settings = SubResource("LabelSettings_g6msb")
+script = ExtResource("5_a7yqq")
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 84.0
+offset_top = -517.0
+offset_right = 183.0
+offset_bottom = -475.0
+grow_vertical = 0
+text = "Energy"
+label_settings = SubResource("LabelSettings_g6msb")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_o2vm6")

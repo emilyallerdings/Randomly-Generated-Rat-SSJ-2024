@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwxko5gcwd3w4"]
+
+[ext_resource type="Texture2D" uid="uid://dl4sgao6ae10x" path="res://assets/icon.svg" id="1_e4322"]
+[ext_resource type="Script" path="res://Script/EnemyAI.gd" id="1_kknp0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n18q4"]
+size = Vector2(45, 41)
+
+[node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
+collision_layer = 9
+collision_mask = 9
+script = ExtResource("1_kknp0")
+speed = 50
+min_Distance = null
+isattacking = null
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.21, 0.21, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_e4322")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_n18q4")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+radius = 111.01
+max_neighbors = 200
+max_speed = 8180.81
+avoidance_layers = 0
+avoidance_mask = 0
+debug_enabled = true
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="PathTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
+[connection signal="timeout" from="PathTimer" to="." method="_on_timer_timeout"]

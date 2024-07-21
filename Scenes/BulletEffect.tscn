@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://driq6auenr1n5"]
+
+[ext_resource type="Script" path="res://Script/BulletEffect.gd" id="1_m7vh7"]
+
+[sub_resource type="Curve" id="Curve_yf6hl"]
+max_value = 100.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1e-05, 100), 0.0, 0.0, 0, 0, Vector2(1, 49.569), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_k6ggm"]
+_data = [Vector2(0, 1), 0.0, -5.7742e-07, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_3mg4t"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.478723, 1)
+colors = PackedColorArray(0, 0.14902, 1, 1, 1, 1, 1, 1)
+
+[node name="BulletEffect" type="CPUParticles2D"]
+modulate = Color(3, 3, 3, 1)
+z_index = 2
+emitting = false
+amount = 15
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+randomness = 0.13
+lifetime_randomness = 0.1
+spread = 85.36
+gravity = Vector2(0, 100)
+initial_velocity_min = 389.76
+initial_velocity_max = 462.49
+damping_min = 8.484
+damping_max = 16.92
+damping_curve = SubResource("Curve_yf6hl")
+scale_amount_min = 5.0
+scale_amount_max = 6.0
+scale_amount_curve = SubResource("Curve_k6ggm")
+color_ramp = SubResource("Gradient_3mg4t")
+script = ExtResource("1_m7vh7")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

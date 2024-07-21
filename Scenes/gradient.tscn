@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://0vbgafss873k"]
+
+[ext_resource type="Texture2D" uid="uid://ctkxiw02x7eh3" path="res://assets/gradient_block.png" id="1_5iskf"]
+
+[node name="Gradient" type="Sprite2D"]
+z_index = 7
+z_as_relative = false
+texture = ExtResource("1_5iskf")

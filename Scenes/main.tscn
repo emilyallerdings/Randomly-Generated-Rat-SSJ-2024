@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://dg2ooau0vrcse"]
+
+[ext_resource type="Script" path="res://Script/main.gd" id="1_e5dyd"]
+[ext_resource type="Script" path="res://Script/DungeonGen.gd" id="2_vaa0y"]
+[ext_resource type="Script" path="res://Scenes/Minimap.gd" id="3_iqc15"]
+
+[sub_resource type="Environment" id="Environment_k3g3d"]
+background_mode = 3
+glow_enabled = true
+glow_levels/1 = 2.48
+glow_levels/2 = 1.0
+glow_intensity = 2.0
+glow_hdr_threshold = 1.1
+glow_hdr_luminance_cap = 101.65
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_e5dyd")
+
+[node name="Dungeon" type="Node2D" parent="." groups=["dungeon"]]
+script = ExtResource("2_vaa0y")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_k3g3d")
+
+[node name="Minimap" type="CanvasLayer" parent="."]
+script = ExtResource("3_iqc15")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Minimap"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 110.0
+grow_horizontal = 0
+
+[node name="SubViewport" type="SubViewport" parent="Minimap/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(150, 100)
+render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="Minimap/SubViewportContainer/SubViewport"]
+zoom = Vector2(0.8, 0.8)

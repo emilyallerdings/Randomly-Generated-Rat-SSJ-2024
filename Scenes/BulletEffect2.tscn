@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://0gqxlld6n62k"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yfno1"]
+particle_flag_disable_z = true
+initial_velocity_min = 77.42
+initial_velocity_max = 77.42
+gravity = Vector3(0, 40, 0)
+color = Color(0, 0.639216, 1, 1)
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.0
+
+[node name="BulletEffect2" type="GPUParticles2D"]
+self_modulate = Color(2, 2, 2, 1)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_yfno1")
+lifetime = 0.5
+explosiveness = 1.0

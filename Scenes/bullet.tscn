@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://due005wd5mds1"]
+
+[ext_resource type="Script" path="res://Script/bullet.gd" id="1_3wtfd"]
+[ext_resource type="Shader" path="res://Shaders/bullet.gdshader" id="2_fvx73"]
+[ext_resource type="Texture2D" uid="uid://dl4sgao6ae10x" path="res://assets/icon.svg" id="3_4vyg7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q0rbh"]
+shader = ExtResource("2_fvx73")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_emcm8"]
+radius = 32.249
+
+[node name="Bullet" type="Area2D"]
+modulate = Color(1, 3, 3, 1)
+scale = Vector2(0.15, 0.15)
+collision_layer = 8
+collision_mask = 32
+script = ExtResource("1_3wtfd")
+
+[node name="Icon" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_q0rbh")
+texture = ExtResource("3_4vyg7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_emcm8")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

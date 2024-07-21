@@ -1,0 +1,85 @@
+[gd_scene load_steps=10 format=3 uid="uid://c60tvy3hgo56j"]
+
+[ext_resource type="Script" path="res://Script/Player.gd" id="1_jikto"]
+[ext_resource type="Texture2D" uid="uid://53l6irhwd1fa" path="res://assets/rat.png" id="2_05a5v"]
+[ext_resource type="Script" path="res://Script/Camera2D.gd" id="3_yudr1"]
+[ext_resource type="Texture2D" uid="uid://chigyohjc2vt0" path="res://assets/crosshair64.png" id="4_e5nnj"]
+[ext_resource type="Script" path="res://addons/shaker/shaker.gd" id="4_p21n7"]
+[ext_resource type="Script" path="res://Script/Label.gd" id="5_a7yqq"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rv2j2"]
+radius = 38.0
+height = 96.0
+
+[sub_resource type="Curve" id="Curve_jan67"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.10608, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_g6msb"]
+font_size = 66
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_jikto")
+
+[node name="Rat" type="Sprite2D" parent="."]
+texture = ExtResource("2_05a5v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_rv2j2")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_speed = 20.0
+script = ExtResource("3_yudr1")
+
+[node name="Shaker" type="Node" parent="Camera2D" node_paths=PackedStringArray("target_node")]
+script = ExtResource("4_p21n7")
+target_node = NodePath("..")
+target_property = &"position"
+min_value = 1.0
+max_value = 10.0
+duration = 0.2
+fall_off = SubResource("Curve_jan67")
+
+[node name="Crosshair" type="Sprite2D" parent="."]
+z_index = 4
+z_as_relative = false
+texture_filter = 1
+texture = ExtResource("4_e5nnj")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+offset_left = 37.0
+offset_top = 42.0
+offset_right = 422.0
+offset_bottom = 82.0
+color = Color(0, 0, 0, 1)
+
+[node name="EnergyBar" type="ColorRect" parent="CanvasLayer"]
+offset_left = 42.0
+offset_top = 46.0
+offset_right = 417.0
+offset_bottom = 76.0
+color = Color(0, 0.489636, 0.853661, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
+texture_filter = 1
+offset_left = 203.0
+offset_top = 10.0
+offset_right = 283.0
+offset_bottom = 41.0
+theme_override_font_sizes/normal_font_size = 21
+text = "Energy"
+fit_content = true
+scroll_active = false
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 40.0
+grow_vertical = 0
+text = "FPS: "
+label_settings = SubResource("LabelSettings_g6msb")
+script = ExtResource("5_a7yqq")

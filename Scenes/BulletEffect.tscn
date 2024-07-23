@@ -12,6 +12,7 @@ _data = [Vector2(0, 1), 0.0, -5.7742e-07, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_3mg4t"]
+resource_local_to_scene = true
 interpolation_mode = 2
 offsets = PackedFloat32Array(0.478723, 1)
 colors = PackedColorArray(0, 0.14902, 1, 1, 1, 1, 1, 1)

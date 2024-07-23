@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://lyvvv6uhv220"]
+
+[ext_resource type="Texture2D" uid="uid://ut0lsyxcbsyf" path="res://assets/upgrade_green.png" id="1_d681c"]
+[ext_resource type="Script" path="res://Script/Upgrade.gd" id="1_v6k4k"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h58fi"]
+height = 48.0
+
+[node name="Upgrade" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_v6k4k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_h58fi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_d681c")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

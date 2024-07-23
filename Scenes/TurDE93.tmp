@@ -1,0 +1,157 @@
+[gd_scene load_steps=20 format=3 uid="uid://cn62f1xmvas4c"]
+
+[ext_resource type="Script" path="res://Scenes/Turret.gd" id="1_5ejjw"]
+[ext_resource type="Texture2D" uid="uid://c8w7rx7yy4bud" path="res://assets/scienceteam/turret.png" id="1_iogmx"]
+[ext_resource type="Shader" path="res://Shaders/flash.gdshader" id="2_65jb8"]
+[ext_resource type="Texture2D" uid="uid://4jrqrplkegay" path="res://assets/scienceteam/eye.png" id="3_xnfml"]
+[ext_resource type="AudioStream" uid="uid://dgctmryo8pp5s" path="res://assets/metal_hit.ogg" id="6_nl611"]
+[ext_resource type="PackedScene" uid="uid://dfflp6qo7salu" path="res://Scenes/HitBox.tscn" id="6_vxfct"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fkg0p"]
+radius = 200.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_exn4k"]
+resource_local_to_scene = true
+shader = ExtResource("2_65jb8")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_value = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4vta"]
+atlas = ExtResource("1_iogmx")
+region = Rect2(0, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vo5w0"]
+atlas = ExtResource("1_iogmx")
+region = Rect2(64, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h8dfr"]
+atlas = ExtResource("1_iogmx")
+region = Rect2(128, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lllbe"]
+atlas = ExtResource("1_iogmx")
+region = Rect2(192, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qn8m3"]
+atlas = ExtResource("1_iogmx")
+region = Rect2(256, 0, 64, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_58eqg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4vta")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vo5w0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h8dfr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lllbe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qn8m3")
+}],
+"loop": false,
+"name": &"build",
+"speed": 1.0
+}]
+
+[sub_resource type="Animation" id="Animation_l30rm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/flash_value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_gx6m1"]
+resource_name = "flash"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/flash_value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_05ugi"]
+_data = {
+"RESET": SubResource("Animation_l30rm"),
+"flash": SubResource("Animation_gx6m1")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yrvvf"]
+size = Vector2(65, 59)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4xteg"]
+size = Vector2(65, 101)
+
+[node name="Turret" type="Node2D"]
+script = ExtResource("1_5ejjw")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_fkg0p")
+debug_color = Color(0.666667, 0.180392, 0.627451, 0.772549)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_exn4k")
+sprite_frames = SubResource("SpriteFrames_58eqg")
+animation = &"build"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimatedSprite2D"]
+libraries = {
+"": SubResource("AnimationLibrary_05ugi")
+}
+speed_scale = 4.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-0.5, 34.5)
+shape = SubResource("RectangleShape2D_yrvvf")
+disabled = true
+
+[node name="EYE" type="Sprite2D" parent="."]
+modulate = Color(6, 1, 1, 1)
+z_index = 9
+z_as_relative = false
+position = Vector2(0, -43)
+texture = ExtResource("3_xnfml")
+
+[node name="ShootTimer" type="Timer" parent="."]
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_nl611")
+volume_db = 5.0
+
+[node name="Hitbox" parent="." instance=ExtResource("6_vxfct")]
+collision_layer = 64
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(-0.5, 13.5)
+shape = SubResource("RectangleShape2D_4xteg")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="frame_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_frame_changed"]
+[connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]

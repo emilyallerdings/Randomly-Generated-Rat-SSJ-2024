@@ -1,5 +1,8 @@
 extends AudioStreamPlayer
+class_name FreeAudio
 
+func _init(audio_source):
+	self.stream = audio_source
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

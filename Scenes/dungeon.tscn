@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://ek50qmr0qwra"]
+
+[ext_resource type="Script" path="res://Script/DungeonGen.gd" id="1_gevio"]
+
+[node name="Dungeon" type="Node2D" groups=["dungeon"]]
+script = ExtResource("1_gevio")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_layers = 2

@@ -1,0 +1,92 @@
+[gd_scene load_steps=8 format=3 uid="uid://bq27tyntamvrr"]
+
+[ext_resource type="Script" path="res://Script/RestartMenu.gd" id="1_fnaks"]
+[ext_resource type="FontFile" uid="uid://dobjwykyde02" path="res://assets/font/nightchilde.ttf" id="2_7oxvw"]
+[ext_resource type="Texture2D" uid="uid://3v7sr58rli74" path="res://assets/Rat_walk_1.png" id="3_4dcqw"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yumkp"]
+font = ExtResource("2_7oxvw")
+font_size = 87
+font_color = Color(0, 0.993871, 3.85046e-07, 1)
+shadow_size = 56
+shadow_color = Color(0, 0.187449, 0, 1)
+
+[sub_resource type="Theme" id="Theme_xy0qr"]
+default_font = ExtResource("2_7oxvw")
+default_font_size = 35
+
+[sub_resource type="LabelSettings" id="LabelSettings_ub7lw"]
+font_size = 46
+
+[sub_resource type="LabelSettings" id="LabelSettings_jpscl"]
+font_size = 20
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fnaks")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -428.0
+offset_top = -226.0
+offset_right = -12.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Randomly 
+Generated 
+Rat"
+label_settings = SubResource("LabelSettings_yumkp")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -421.0
+offset_top = 49.0
+offset_right = -256.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_xy0qr")
+text = "Play"
+
+[node name="RatWalk1" type="Sprite2D" parent="."]
+position = Vector2(784, 135)
+scale = Vector2(5, 5)
+texture = ExtResource("3_4dcqw")
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 691.0
+offset_top = 312.0
+offset_right = 891.0
+offset_bottom = 376.0
+text = "Controls:"
+label_settings = SubResource("LabelSettings_ub7lw")
+
+[node name="Label3" type="Label" parent="."]
+layout_mode = 0
+offset_left = 689.0
+offset_top = 378.0
+offset_right = 893.0
+offset_bottom = 442.0
+text = "WASD - Move around
+Left Click - Shoot
+Alt + F4 - Quit"
+label_settings = SubResource("LabelSettings_jpscl")
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -5,8 +5,9 @@ extends CPUParticles2D
 func _ready():
 	pass # Replace with function body.
 
-func start(dir):
+func start(dir, color):
 	self.direction = dir
+	self.color_ramp.set_color(0, color)
 	self.emitting = true
 
 

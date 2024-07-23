@@ -1,8 +1,9 @@
-[gd_scene load_steps=32 format=3 uid="uid://vgv1eqkdo6ju"]
+[gd_scene load_steps=45 format=3 uid="uid://vgv1eqkdo6ju"]
 
 [ext_resource type="Script" path="res://Script/Room.gd" id="1_kgakx"]
 [ext_resource type="Texture2D" uid="uid://cdcdlyw8f1087" path="res://assets/Dark_lvl0.png" id="2_vbhio"]
 [ext_resource type="Texture2D" uid="uid://dn7on885og4yd" path="res://assets/door_up.png" id="3_1x311"]
+[ext_resource type="Texture2D" uid="uid://dbxiok5osxpo4" path="res://assets/tilesbig.png" id="3_ylmon"]
 [ext_resource type="Texture2D" uid="uid://bcx6hauqj4fha" path="res://assets/walls.png" id="4_40ysw"]
 [ext_resource type="Shader" path="res://Shaders/smoothpixel.gdshader" id="5_xkkgc"]
 [ext_resource type="Texture2D" uid="uid://ca578s2dbtukn" path="res://assets/floor.png" id="6_hbcob"]
@@ -11,8 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://dlkq5te5kl2hj" path="res://assets/wall_side.png" id="9_qrxsq"]
 [ext_resource type="Texture2D" uid="uid://brhtkrp3hi5le" path="res://assets/wall_corner.png" id="10_c0s6u"]
 [ext_resource type="Texture2D" uid="uid://7b852548y3f7" path="res://assets/wall_corner_pixel.png" id="11_by2bv"]
-[ext_resource type="PackedScene" uid="uid://cax8o7npv821a" path="res://Scenes/scientist.tscn" id="12_bmu1m"]
-[ext_resource type="Script" path="res://Scenes/Entities.gd" id="12_piil2"]
+[ext_resource type="Script" path="res://Script/Entities.gd" id="13_5hrb1"]
+[ext_resource type="Texture2D" uid="uid://b78h4elj21fgo" path="res://assets/doordown.png" id="14_t7hlj"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_bvukb"]
 vertices = PackedVector2Array(32, 32, -32, 32, -32, -32, 32, -32)
@@ -69,6 +70,7 @@ texture_region_size = Vector2i(64, 64)
 0:1/0/physics_layer_1/angular_velocity = 0.0
 0:1/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_bvukb")
 1:1/0 = 0
+1:1/0/z_index = -5
 1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:1/0/physics_layer_0/angular_velocity = 0.0
 1:1/0/physics_layer_1/linear_velocity = Vector2(0, 0)
@@ -148,6 +150,16 @@ texture_region_size = Vector2i(64, 64)
 6:4/0/physics_layer_0/angular_velocity = 0.0
 6:4/0/physics_layer_1/linear_velocity = Vector2(0, 0)
 6:4/0/physics_layer_1/angular_velocity = 0.0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ho107"]
+texture = ExtResource("3_ylmon")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+0:0/0/z_index = -10
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_1/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_1/angular_velocity = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bpscu"]
 texture = ExtResource("3_1x311")
@@ -333,6 +345,7 @@ sources/6 = SubResource("TileSetAtlasSource_a1y6y")
 sources/7 = SubResource("TileSetAtlasSource_liuq3")
 sources/8 = SubResource("TileSetAtlasSource_demsr")
 sources/9 = SubResource("TileSetAtlasSource_rfmuk")
+sources/10 = SubResource("TileSetAtlasSource_ho107")
 
 [sub_resource type="Animation" id="Animation_kgu0e"]
 resource_name = "fade_out"
@@ -357,11 +370,85 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cw4qa"]
 size = Vector2(960, 576)
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_lijb3"]
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_5agw1"]
 vertices = PackedVector2Array(886, 502, 74, 502, 74, 74, 886, 74)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(64, 64, 896, 64, 896, 512, 64, 512)])
 source_geometry_group_name = &"navigation_polygon_source_group"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_op7d3"]
+atlas = ExtResource("14_t7hlj")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b3g6p"]
+atlas = ExtResource("14_t7hlj")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hm2sn"]
+atlas = ExtResource("14_t7hlj")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bstxd"]
+atlas = ExtResource("14_t7hlj")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_di00o"]
+atlas = ExtResource("14_t7hlj")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p7fg0"]
+atlas = ExtResource("14_t7hlj")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sdsbh"]
+atlas = ExtResource("14_t7hlj")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dlfi2"]
+atlas = ExtResource("14_t7hlj")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dip67"]
+atlas = ExtResource("14_t7hlj")
+region = Rect2(512, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p4nyl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_op7d3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b3g6p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hm2sn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bstxd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_di00o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p7fg0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sdsbh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dlfi2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dip67")
+}],
+"loop": false,
+"name": &"open",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iairf"]
+size = Vector2(66, 65)
 
 [node name="Room" type="Node2D"]
 script = ExtResource("1_kgakx")
@@ -394,14 +481,30 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="Entities" type="Node2D" parent="."]
 process_mode = 4
-script = ExtResource("12_piil2")
-
-[node name="Scientist" parent="Entities" instance=ExtResource("12_bmu1m")]
-position = Vector2(486, 281)
+script = ExtResource("13_5hrb1")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 modulate = Color(1, 1, 1, 0.0941176)
-navigation_polygon = SubResource("NavigationPolygon_lijb3")
+navigation_polygon = SubResource("NavigationPolygon_5agw1")
 use_edge_connections = false
 
+[node name="ExitDoor" type="AnimatedSprite2D" parent="."]
+visible = false
+z_index = -1
+z_as_relative = false
+sprite_frames = SubResource("SpriteFrames_p4nyl")
+animation = &"open"
+
+[node name="Area2D" type="Area2D" parent="ExitDoor"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor/Area2D"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_iairf")
+
 [connection signal="body_entered" from="EnterRoom" to="." method="_on_enter_room_body_entered"]
+[connection signal="child_entered_tree" from="Entities" to="Entities" method="_on_child_entered_tree"]
+[connection signal="child_exiting_tree" from="Entities" to="Entities" method="_on_child_exiting_tree"]
+[connection signal="animation_finished" from="ExitDoor" to="." method="_on_exit_door_animation_finished"]
+[connection signal="body_entered" from="ExitDoor/Area2D" to="." method="player_exit"]

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="SpawnerEffect" load_steps=3 format=3 uid="uid://b4g3sahra0xqk"]
+
+[ext_resource type="Script" path="res://resources/spawnereffect.gd" id="1_5ibnf"]
+[ext_resource type="PackedScene" uid="uid://wokhi8ra41qt" path="res://Scenes/BelchEffect.tscn" id="1_nw4sk"]
+
+[resource]
+script = ExtResource("1_5ibnf")
+node_to_spawn = ExtResource("1_nw4sk")

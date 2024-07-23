@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://wokhi8ra41qt"]
+
+[ext_resource type="Script" path="res://Script/BelchEffect.gd" id="1_3xw0p"]
+[ext_resource type="Texture2D" uid="uid://bwy6tl73oe5m0" path="res://assets/belch_aoe.png" id="1_4iaq8"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n301f"]
+radius = 12.13
+height = 66.0
+
+[sub_resource type="Animation" id="Animation_r6m0h"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_jffnr"]
+resource_name = "fade_out"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e2ro0"]
+_data = {
+"RESET": SubResource("Animation_r6m0h"),
+"fade_out": SubResource("Animation_jffnr")
+}
+
+[node name="BelchEffect" type="Area2D"]
+modulate = Color(2, 2, 2, 1)
+z_index = -1
+z_as_relative = false
+collision_layer = 0
+collision_mask = 64
+script = ExtResource("1_3xw0p")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_4iaq8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5.87)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_n301f")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_e2ro0")
+}

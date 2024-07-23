@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dg2ooau0vrcse"]
+[gd_scene load_steps=8 format=3 uid="uid://dg2ooau0vrcse"]
 
 [ext_resource type="Script" path="res://Script/main.gd" id="1_e5dyd"]
-[ext_resource type="Script" path="res://Script/DungeonGen.gd" id="2_vaa0y"]
-[ext_resource type="Script" path="res://Scenes/Minimap.gd" id="3_iqc15"]
+[ext_resource type="PackedScene" uid="uid://ek50qmr0qwra" path="res://Scenes/dungeon.tscn" id="2_syej0"]
+[ext_resource type="PackedScene" uid="uid://bgt33lncnrul1" path="res://Scenes/minimap.tscn" id="3_w1nnf"]
+[ext_resource type="AudioStream" uid="uid://dc8kklfrm5wc5" path="res://assets/ambient.ogg" id="4_mdi78"]
+[ext_resource type="Shader" path="res://Shaders/thingy.gdshader" id="5_1wjj8"]
 
 [sub_resource type="Environment" id="Environment_k3g3d"]
 background_mode = 3
@@ -13,32 +15,42 @@ glow_intensity = 2.0
 glow_hdr_threshold = 1.1
 glow_hdr_luminance_cap = 101.65
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bbpwa"]
+shader = ExtResource("5_1wjj8")
+shader_parameter/fadeWidth = 3.8
+shader_parameter/randRes = 50.0
+shader_parameter/baseAdd = 0.1
+
+[node name="Main" type="Node2D"]
 script = ExtResource("1_e5dyd")
 
-[node name="Dungeon" type="Node2D" parent="." groups=["dungeon"]]
-script = ExtResource("2_vaa0y")
+[node name="Dungeon" parent="." instance=ExtResource("2_syej0")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_k3g3d")
 
-[node name="Minimap" type="CanvasLayer" parent="."]
-script = ExtResource("3_iqc15")
+[node name="Minimap" parent="." instance=ExtResource("3_w1nnf")]
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Minimap"]
-anchors_preset = 1
-anchor_left = 1.0
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_mdi78")
+autoplay = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
-offset_left = -160.0
-offset_top = 10.0
-offset_right = -10.0
-offset_bottom = 110.0
-grow_horizontal = 0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
 
-[node name="SubViewport" type="SubViewport" parent="Minimap/SubViewportContainer"]
-handle_input_locally = false
-size = Vector2i(150, 100)
-render_target_update_mode = 4
+[node name="CanvasLayer" type="CanvasLayer" parent="Control"]
 
-[node name="Camera2D" type="Camera2D" parent="Minimap/SubViewportContainer/SubViewport"]
-zoom = Vector2(0.8, 0.8)
+[node name="ColorRect" type="ColorRect" parent="Control/CanvasLayer"]
+material = SubResource("ShaderMaterial_bbpwa")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1

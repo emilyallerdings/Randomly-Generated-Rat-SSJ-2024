@@ -1,10 +1,94 @@
-[gd_scene load_steps=8 format=3 uid="uid://c60tvy3hgo56j"]
+[gd_scene load_steps=46 format=3 uid="uid://c60tvy3hgo56j"]
 
 [ext_resource type="Script" path="res://Script/Player.gd" id="1_jikto"]
+[ext_resource type="Shader" path="res://Shaders/flash.gdshader" id="2_0sigs"]
 [ext_resource type="Texture2D" uid="uid://53l6irhwd1fa" path="res://assets/rat.png" id="2_05a5v"]
+[ext_resource type="Texture2D" uid="uid://dja3s02a1dox4" path="res://assets/Rat_walk.png" id="4_aapfj"]
 [ext_resource type="Texture2D" uid="uid://chigyohjc2vt0" path="res://assets/crosshair64.png" id="4_e5nnj"]
 [ext_resource type="Script" path="res://Script/Label.gd" id="5_a7yqq"]
+[ext_resource type="LabelSettings" uid="uid://bl52ng05uk2g8" path="res://resources/TitleLabelSettings.tres" id="5_gtsta"]
+[ext_resource type="Texture2D" uid="uid://c4dim62ta1cc7" path="res://assets/Rat_neutral.png" id="5_vcowf"]
+[ext_resource type="Texture2D" uid="uid://yb1kan1qved8" path="res://assets/Rat_spit.png" id="6_adayn"]
+[ext_resource type="PackedScene" uid="uid://dfflp6qo7salu" path="res://Scenes/HitBox.tscn" id="6_xix36"]
+[ext_resource type="AudioStream" uid="uid://df630hsppyk6v" path="res://assets/wrong.ogg" id="7_4b8st"]
+[ext_resource type="Texture2D" uid="uid://cdt8j40oxoj8t" path="res://assets/Rat_spit2.png" id="7_jbggq"]
 [ext_resource type="AudioStream" uid="uid://dfedlq7qbv6uv" path="res://assets/untitled.ogg" id="7_o2vm6"]
+[ext_resource type="Texture2D" uid="uid://bn4eemuthvbov" path="res://assets/Rat_neutral2.png" id="8_jo3jg"]
+[ext_resource type="Script" path="res://Script/HeartsContainer.gd" id="9_f3p6c"]
+[ext_resource type="Script" path="res://Script/UpgradeMenu.gd" id="13_w76g6"]
+[ext_resource type="Script" path="res://Script/UpgradeBase.gd" id="14_ge3rj"]
+[ext_resource type="Texture2D" uid="uid://vgu86tebtrm3" path="res://assets/arrow.png" id="14_jnrap"]
+[ext_resource type="Script" path="res://Script/MutationMenu.gd" id="15_dk6r1"]
+[ext_resource type="Script" path="res://Script/MutationBase.gd" id="16_2sktr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_11iyu"]
+resource_local_to_scene = true
+shader = ExtResource("2_0sigs")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_value = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1axf"]
+atlas = ExtResource("5_vcowf")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0itci"]
+atlas = ExtResource("6_adayn")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2y5nm"]
+atlas = ExtResource("8_jo3jg")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ivdh"]
+atlas = ExtResource("7_jbggq")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3dr5f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1axf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0itci")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2y5nm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ivdh")
+}],
+"loop": false,
+"name": &"default2",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k7ie6"]
+atlas = ExtResource("4_aapfj")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fk6yy"]
+atlas = ExtResource("4_aapfj")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1pp78"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k7ie6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fk6yy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kyr8i"]
 radius = 16.0
@@ -13,17 +97,115 @@ height = 54.0
 [sub_resource type="LabelSettings" id="LabelSettings_g6msb"]
 font_size = 25
 
+[sub_resource type="LabelSettings" id="LabelSettings_dm56g"]
+line_spacing = -12.0
+font_size = 14
+shadow_size = 3
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_88m58"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_hvfgj"]
+font_size = 24
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v27sb"]
+radius = 12.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7b6q0"]
+radius = 33.0606
+
+[sub_resource type="Animation" id="Animation_pygsk"]
+resource_name = "flash"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.341176), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fjvey"]
+_data = {
+"flash": SubResource("Animation_pygsk")
+}
+
+[sub_resource type="Animation" id="Animation_rlnpb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rat/Rat:material:shader_parameter/flash_value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_lgvyn"]
+resource_name = "flash"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rat/Rat:material:shader_parameter/flash_value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.5, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m1rsy"]
+_data = {
+"RESET": SubResource("Animation_rlnpb"),
+"flash": SubResource("Animation_lgvyn")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_3y8ks"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_fq4pf"]
+font_size = 48
+
+[sub_resource type="LabelSettings" id="LabelSettings_tolbm"]
+line_spacing = -3.0
+font_size = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_h48se"]
+font_size = 32
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 5
-collision_mask = 14
+z_as_relative = false
+collision_mask = 4
 script = ExtResource("1_jikto")
 
 [node name="Rat" type="Node2D" parent="."]
 scale = Vector2(-1, 1)
 
 [node name="Rat" type="Sprite2D" parent="Rat"]
+visible = false
+material = SubResource("ShaderMaterial_11iyu")
 rotation = 0.514872
 texture = ExtResource("2_05a5v")
+
+[node name="RatUpper" type="AnimatedSprite2D" parent="Rat"]
+sprite_frames = SubResource("SpriteFrames_3dr5f")
+animation = &"default2"
+
+[node name="Rat2" type="AnimatedSprite2D" parent="Rat"]
+sprite_frames = SubResource("SpriteFrames_1pp78")
+frame = 1
+frame_progress = 0.0268874
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -37,22 +219,10 @@ texture = ExtResource("4_e5nnj")
 metadata/_edit_lock_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-offset_left = 6.0
-offset_top = 56.0
-offset_right = 239.0
-offset_bottom = 80.0
-color = Color(0, 0, 0, 1)
-
-[node name="EnergyBar" type="ColorRect" parent="CanvasLayer"]
-offset_left = 10.0
-offset_top = 59.0
-offset_right = 235.0
-offset_bottom = 76.0
-color = Color(0, 0.489636, 0.853661, 1)
+layer = 2
 
 [node name="Label2" type="Label" parent="CanvasLayer"]
+visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -66,6 +236,7 @@ label_settings = SubResource("LabelSettings_g6msb")
 script = ExtResource("5_a7yqq")
 
 [node name="Label" type="Label" parent="CanvasLayer"]
+visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -77,5 +248,499 @@ grow_vertical = 0
 text = "Energy"
 label_settings = SubResource("LabelSettings_g6msb")
 
+[node name="Stats" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -6.0
+offset_right = 155.0
+offset_bottom = 125.0
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+
+[node name="CurrentDiff" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "Weapon:"
+label_settings = ExtResource("5_gtsta")
+
+[node name="Weapon" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "Weapon:"
+label_settings = ExtResource("5_gtsta")
+
+[node name="WeaponDesc" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "poop"
+label_settings = SubResource("LabelSettings_dm56g")
+
+[node name="Stomach" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "Stomach:"
+label_settings = ExtResource("5_gtsta")
+
+[node name="StomachDesc" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_dm56g")
+
+[node name="Feet" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "Stomach:"
+label_settings = ExtResource("5_gtsta")
+
+[node name="FeetDesc" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_dm56g")
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_88m58")
+
+[node name="damage_coeff" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "damage_coeff: "
+label_settings = ExtResource("5_gtsta")
+
+[node name="charge_coeff" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "charge_coeff: "
+label_settings = ExtResource("5_gtsta")
+
+[node name="bullet_scale_coeff" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "bullet_scale_coeff: "
+label_settings = ExtResource("5_gtsta")
+
+[node name="bullspeed_coeff" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "bullet_scale_coeff: "
+label_settings = ExtResource("5_gtsta")
+
+[node name="traction_coeff" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "traction_coeff: "
+label_settings = ExtResource("5_gtsta")
+
+[node name="speed_coeff" type="Label" parent="CanvasLayer/Stats"]
+layout_mode = 2
+text = "speed_coeff: "
+label_settings = ExtResource("5_gtsta")
+
+[node name="HeartsContainer" type="HBoxContainer" parent="CanvasLayer"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 48.0
+offset_bottom = 48.0
+script = ExtResource("9_f3p6c")
+
+[node name="Label3" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -24.5
+offset_top = 2.415
+offset_right = 24.5
+offset_bottom = 25.415
+grow_horizontal = 2
+text = "Floor: "
+label_settings = SubResource("LabelSettings_hvfgj")
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_o2vm6")
+
+[node name="Hitbox" parent="." instance=ExtResource("6_xix36")]
+collision_layer = 128
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_v27sb")
+
+[node name="NoEnergy" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_4b8st")
+volume_db = -12.0
+pitch_scale = 0.8
+
+[node name="Energy_Bar" type="Node2D" parent="."]
+position = Vector2(0, -32)
+scale = Vector2(0.2, 0.15)
+
+[node name="Background" type="ColorRect" parent="Energy_Bar"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -116.5
+offset_top = -12.0
+offset_right = 116.5
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="EnergyBar" type="ColorRect" parent="Energy_Bar"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.5
+offset_top = -8.5
+offset_right = 112.5
+offset_bottom = 8.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.489636, 0.853661, 1)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 256
+collision_mask = 64
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("CircleShape2D_7b6q0")
+
+[node name="Flash" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="ColorRect" type="ColorRect" parent="Flash"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Flash/ColorRect"]
+libraries = {
+"": SubResource("AnimationLibrary_fjvey")
+}
+speed_scale = 5.0
+
+[node name="InvincibilityFlash" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_m1rsy")
+}
+speed_scale = 5.0
+
+[node name="InvincibleTimer" type="Timer" parent="."]
+
+[node name="UpgradeMenu" type="CanvasLayer" parent="."]
+layer = 5
+visible = false
+script = ExtResource("13_w76g6")
+
+[node name="ColorRect" type="ColorRect" parent="UpgradeMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.968627)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UpgradeMenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Upgrade1" type="ColorRect" parent="UpgradeMenu/HBoxContainer"]
+custom_minimum_size = Vector2(200, 120.56)
+layout_mode = 2
+color = Color(0.0383972, 0.0383972, 0.0383971, 1)
+script = ExtResource("14_ge3rj")
+
+[node name="Button" type="Button" parent="UpgradeMenu/HBoxContainer/Upgrade1"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -37.5
+offset_top = -38.325
+offset_right = 37.5
+offset_bottom = -7.325
+grow_horizontal = 2
+grow_vertical = 0
+text = "Upgrade"
+
+[node name="Label" type="Label" parent="UpgradeMenu/HBoxContainer/Upgrade1"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.5
+offset_top = -11.5
+offset_right = 60.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Increase Health"
+label_settings = SubResource("LabelSettings_3y8ks")
+
+[node name="Upgrade2" type="ColorRect" parent="UpgradeMenu/HBoxContainer"]
+custom_minimum_size = Vector2(200, 120.56)
+layout_mode = 2
+color = Color(0.0383972, 0.0383972, 0.0383971, 1)
+script = ExtResource("14_ge3rj")
+
+[node name="Button" type="Button" parent="UpgradeMenu/HBoxContainer/Upgrade2"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -37.5
+offset_top = -38.325
+offset_right = 37.5
+offset_bottom = -7.325
+grow_horizontal = 2
+grow_vertical = 0
+text = "Upgrade"
+
+[node name="Label" type="Label" parent="UpgradeMenu/HBoxContainer/Upgrade2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.5
+offset_top = -11.5
+offset_right = 60.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Increase Health"
+label_settings = SubResource("LabelSettings_3y8ks")
+
+[node name="Upgrade3" type="ColorRect" parent="UpgradeMenu/HBoxContainer"]
+custom_minimum_size = Vector2(200, 120.56)
+layout_mode = 2
+color = Color(0.0383972, 0.0383972, 0.0383971, 1)
+script = ExtResource("14_ge3rj")
+
+[node name="Button" type="Button" parent="UpgradeMenu/HBoxContainer/Upgrade3"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -37.5
+offset_top = -38.325
+offset_right = 37.5
+offset_bottom = -7.325
+grow_horizontal = 2
+grow_vertical = 0
+text = "Upgrade"
+
+[node name="Label" type="Label" parent="UpgradeMenu/HBoxContainer/Upgrade3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.5
+offset_top = -11.5
+offset_right = 60.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Increase Health"
+label_settings = SubResource("LabelSettings_3y8ks")
+
+[node name="Label" type="Label" parent="UpgradeMenu"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -153.0
+offset_top = 19.965
+offset_right = 153.0
+offset_bottom = 86.965
+grow_horizontal = 2
+text = "Pick Upgrade"
+label_settings = SubResource("LabelSettings_fq4pf")
+
+[node name="SkipButton" type="Button" parent="UpgradeMenu"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.5
+offset_top = -140.99
+offset_right = 20.5
+offset_bottom = -109.99
+grow_horizontal = 2
+grow_vertical = 0
+text = "Skip"
+
+[node name="MutationMenu" type="CanvasLayer" parent="."]
+layer = 5
+visible = false
+script = ExtResource("15_dk6r1")
+
+[node name="ColorRect" type="ColorRect" parent="MutationMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.968627)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MutationMenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="From" type="ColorRect" parent="MutationMenu/HBoxContainer"]
+custom_minimum_size = Vector2(250, 143.47)
+layout_mode = 2
+color = Color(0.0383972, 0.0383972, 0.0383971, 1)
+script = ExtResource("16_2sktr")
+
+[node name="Title" type="Label" parent="MutationMenu/HBoxContainer/From"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.5
+offset_top = 7.605
+offset_right = 60.5
+offset_bottom = 33.605
+grow_horizontal = 2
+text = "Belch Bubble"
+label_settings = SubResource("LabelSettings_3y8ks")
+
+[node name="Desc" type="Label" parent="MutationMenu/HBoxContainer/From"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 40.0
+offset_right = -8.0
+offset_bottom = -10.47
+grow_horizontal = 2
+grow_vertical = 2
+text = "blah blah blah
+Blah"
+label_settings = SubResource("LabelSettings_tolbm")
+
+[node name="Button" type="Button" parent="MutationMenu/HBoxContainer/From"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -23.5
+offset_top = 22.175
+offset_right = 25.11
+offset_bottom = 53.175
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 26
+text = "Keep
+"
+
+[node name="TextureRect" type="TextureRect" parent="MutationMenu/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("14_jnrap")
+expand_mode = 2
+
+[node name="To" type="ColorRect" parent="MutationMenu/HBoxContainer"]
+custom_minimum_size = Vector2(250, 143.47)
+layout_mode = 2
+color = Color(0.0383972, 0.0383972, 0.0383971, 1)
+script = ExtResource("16_2sktr")
+id = 1
+
+[node name="Title" type="Label" parent="MutationMenu/HBoxContainer/To"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.5
+offset_top = 7.605
+offset_right = 60.5
+offset_bottom = 33.605
+grow_horizontal = 2
+text = "Belch Bubble"
+label_settings = SubResource("LabelSettings_3y8ks")
+
+[node name="Desc" type="Label" parent="MutationMenu/HBoxContainer/To"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 40.0
+offset_right = -8.0
+offset_bottom = -10.47
+grow_horizontal = 2
+grow_vertical = 2
+text = "blah blah blah"
+label_settings = SubResource("LabelSettings_tolbm")
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="MutationMenu/HBoxContainer/To"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -23.5
+offset_top = 22.175
+offset_right = 25.11
+offset_bottom = 53.175
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 26
+text = "Swap
+"
+
+[node name="Label" type="Label" parent="MutationMenu"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -153.0
+offset_top = 19.965
+offset_right = 153.0
+offset_bottom = 86.965
+grow_horizontal = 2
+text = "Swap Mutation?"
+label_settings = SubResource("LabelSettings_fq4pf")
+
+[node name="Type" type="Label" parent="MutationMenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.5
+offset_top = -121.0
+offset_right = 40.5
+offset_bottom = -75.9999
+grow_horizontal = 2
+grow_vertical = 2
+text = "Weapon"
+label_settings = SubResource("LabelSettings_h48se")
+
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
+[connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
+[connection signal="timeout" from="InvincibleTimer" to="." method="_on_invincible_timer_timeout"]
+[connection signal="pressed" from="UpgradeMenu/SkipButton" to="UpgradeMenu" method="_on_skip_button_pressed"]

@@ -1,0 +1,5 @@
+[gd_resource type="LabelSettings" format=3 uid="uid://bl52ng05uk2g8"]
+
+[resource]
+shadow_size = 3
+shadow_color = Color(0, 0, 0, 1)

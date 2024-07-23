@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://uxa8j12hstyl"]
 
 [ext_resource type="Texture2D" uid="uid://ch62clanjogfk" path="res://assets/scienceteam/blood_particle.png" id="1_u5c6u"]
-[ext_resource type="Script" path="res://Scenes/BloodParticles.gd" id="2_jmptf"]
+[ext_resource type="Script" path="res://Script/BloodParticles.gd" id="2_n55xe"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hti5y"]
 resource_local_to_scene = true
@@ -18,7 +18,7 @@ point_count = 3
 curve = SubResource("Curve_lgkgl")
 
 [sub_resource type="Gradient" id="Gradient_h1rxf"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+colors = PackedColorArray(0.129559, 0.129558, 0.129558, 1, 0.864675, 0.864675, 0.864675, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_bisyx"]
 gradient = SubResource("Gradient_h1rxf")
@@ -68,6 +68,6 @@ speed_scale = 2.5
 explosiveness = 1.0
 randomness = 0.2
 fixed_fps = 144
-script = ExtResource("2_jmptf")
+script = ExtResource("2_n55xe")
 
 [connection signal="finished" from="." to="." method="_on_finished"]

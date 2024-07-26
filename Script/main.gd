@@ -41,7 +41,7 @@ func _ready():
 
 func leave_dungeon():
 	Globals.floor_num += 1
-	Globals.difficulty += 0.5
+	Globals.difficulty -= 0.25
 	red_mod += 0.05
 	red_mod = clamp(red_mod, 0.0, 0.2)
 	player.global_position = dungeon.get_start_room().get_middle_offset() + dungeon.get_start_room().global_position
@@ -66,13 +66,14 @@ func _process(delta):
 	pass
 
 func _unhandled_input(event):
-	if event.is_action("zoom_in"):
-		camera_2d.zoom += Vector2(0.1,0.1)
-	if event.is_action("zoom_out"):
-		camera_2d.zoom -= Vector2(0.1,0.1)
-	if event.is_action_pressed("test"):
-		print("pressed")
-		leave_dungeon()
+	#if event.is_action("zoom_in"):
+		#camera_2d.zoom += Vector2(0.1,0.1)
+	#if event.is_action("zoom_out"):
+		#camera_2d.zoom -= Vector2(0.1,0.1)
+	#if event.is_action_pressed("test"):
+		#print("pressed")
+		#leave_dungeon()
+	return
 
 func gen_seed():
 	var dung_seed = ""

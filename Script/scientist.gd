@@ -9,6 +9,9 @@ enum State{SETUP,ALERTED,IDLE,SCARED,BUILDING}
 #const GUTSPLODE = preload("res://Scenes/gutsplode.tscn")
 const BLOOD_PARTICLES = preload("res://Scenes/blood_particles.tscn")
 const TURRET = preload("res://Scenes/Turret.tscn")
+const hitsound = preload("res://assets/hit.ogg")
+
+const gutsplode_sound = preload("res://assets/gutsplode.ogg")
 
 var state = State.SETUP
 var room = null
@@ -16,9 +19,11 @@ var player = null
 var extra_vel:Vector2 = Vector2.ZERO
 var movement_vel:Vector2 = Vector2.ZERO
 var killed = false
-var run_speed = 250
+var run_speed = 240
 
-var health = 150
+
+var blood_delay = false
+var health = 200
 
 var turret = null
 var turret_pos = null
@@ -32,8 +37,8 @@ func _ready():
 	parent.enemy_added(self)
 	
 	
-	run_speed = clamp(int((run_speed + Globals.difficulty * 10) * randf_range(0.8,1.2)), 100, 450)
-	health = clamp(int((health + Globals.difficulty * 25) * randf_range(0.8,1.2)), 0, 800)
+	run_speed = clamp(int((run_speed + Globals.difficulty * 6) * randf_range(0.8,1.2)), 100, 600)
+	health = clamp(int((health + Globals.difficulty * 25) * randf_range(0.8,1.2)), 0, 1200)
 	
 	$AnimatedSprite2D.play("scared")
 	pass # Replace with function body.
@@ -50,8 +55,9 @@ func _process(delta):
 		return
 	
 	if state == State.BUILDING:
+		velocity = Vector2.ZERO
 		$AnimatedSprite2D.play("build")
-		if self.position < turret_pos:
+		if self.position <= turret_pos:
 			$AnimatedSprite2D.flip_h = true
 		else:
 			$AnimatedSprite2D.flip_h = false
@@ -95,14 +101,14 @@ func _physics_process(delta):
 	#extra_vel = extra_vel.snapped(0.5)
 	
 	#print(extra_vel)
-	
-	self.velocity = movement_vel + extra_vel
-	if self.velocity.x < 0:
-		$AnimatedSprite2D.flip_h = false
-	elif self.velocity.x > 0:
-		$AnimatedSprite2D.flip_h = true
+
 		
 	if state != State.BUILDING:
+		self.velocity = movement_vel + extra_vel
+		if self.velocity.x < 0:
+			$AnimatedSprite2D.flip_h = false
+		elif self.velocity.x > 0:
+			$AnimatedSprite2D.flip_h = true
 		move_and_slide()
 	
 func run_away():
@@ -123,21 +129,27 @@ func handle_damage(damage):
 		#print("b ", state)
 		state = State.SCARED
 		#print(state)
-		
-	var blood_particle = BLOOD_PARTICLES.instantiate()
-	blood_particle.position = self.position
+	
+	
+	var blood_particle = null
+	if !blood_delay:
+		blood_particle = BLOOD_PARTICLES.instantiate()
+		blood_particle.position = self.position
 	
 	if health <= 0:
 		if killed:
 			return
 			
 		killed = true
+		
+		blood_particle = BLOOD_PARTICLES.instantiate()
+		blood_particle.position = self.position
 		blood_particle.amount = blood_particle.amount*4
 		blood_particle.bigger(2)
 		blood_particle.faster(3)
 		blood_particle.lifetime = blood_particle.lifetime
 		
-		var gutsplode = FreeAudio.new(preload("res://assets/gutsplode.ogg"))
+		var gutsplode = FreeAudio.new(gutsplode_sound, 5)
 		
 		get_parent().add_child(gutsplode)
 		get_parent().enemy_removed(position)
@@ -147,17 +159,25 @@ func handle_damage(damage):
 			
 		queue_free()
 	else:
-		var hitsound = FreeAudio.new(preload("res://assets/hit.ogg"))
-		hitsound.pitch_scale = 0.82 + randf_range(-0.1, 0.1)
-		get_parent().add_child(hitsound)
+		if !blood_delay:
+			var hitsound = FreeAudio.new(hitsound, 4)
+			hitsound.pitch_scale = 0.82 + randf_range(-0.1, 0.1)
+			get_parent().add_child(hitsound)
 	
 		
 	if !$AnimatedSprite2D/FlashAnim.is_playing():
 		$AnimatedSprite2D/FlashAnim.play("flash")
-		
-	get_parent().add_child(blood_particle)
 	
-
+	if !blood_delay:
+		blood_delay = true
+		blood_delay_start()
+	if blood_particle:
+		get_parent().add_child(blood_particle)
+	
+func blood_delay_start():
+	await get_tree().create_timer(0.05).timeout
+	blood_delay = false
+	
 func get_player():
 	player = get_tree().get_first_node_in_group("player")
 
@@ -198,7 +218,9 @@ func create_turret():
 		
 	#var middle = room.get_middle() + room.global_position
 	#if player.global_position.y < middle.y:
-	var dire = player.prev_room.get_dir_to_room(room)
+	var dire = Vector2(1,0)
+	if player.prev_room:
+		dire = player.prev_room.get_dir_to_room(room)
 	
 	#print("direct ", dire)
 	
@@ -215,7 +237,9 @@ func create_turret():
 	max -= Vector2(64,64) * 1
 	#print("min: ", min, "max: ", max)
 	
+	var num_tries = 0
 	while true:
+		num_tries += 1
 		turret_pos = Vector2(randi_range(min.x, max.x), randi_range(min.y,max.y))
 			#self.movement_vel = self.position.direction_to(turret_pos).normalized() * -1 * 100
 		
@@ -235,7 +259,7 @@ func create_turret():
 			
 			if !is_within_dist_turrets(turret_pos, 100):
 				break
-	
+		await get_tree().create_timer(num_tries * 0.05).timeout
 	#print(navigation_agent.target_position)
 	
 	var n_turret = TURRET.instantiate()

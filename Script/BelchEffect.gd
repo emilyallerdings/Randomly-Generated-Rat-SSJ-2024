@@ -13,7 +13,8 @@ func _ready():
 	print("POOP")
 	if creator:
 		icon.modulate = creator.color
-		
+		$Glow.modulate = creator.color
+
 		#icon.modulate.a = 1.0
 		#icon.self_modulate = creator.self_modulate
 		self.scale = creator.scale * 6
@@ -29,11 +30,13 @@ func start_damage():
 		duration -= 1
 		
 		var hitevent:HitEvent = HitEvent.new()
-		hitevent.damage = damage
+		hitevent.damage = max(1,damage)
 		
 		var bodies = self.get_overlapping_bodies()
+		
 		for body in bodies:
 			if body.has_method("hit"):
+				
 				body.hit(hitevent)
 		
 		if duration == 0:

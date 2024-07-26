@@ -8,6 +8,6 @@ func on_trigger(node):
 		var new_spawn = node_to_spawn.instantiate()
 		if new_spawn.has_method("set_creator"):
 			new_spawn.set_creator(node)
-		new_spawn.global_position = node.global_position + node.velocity.normalized()*32
+		new_spawn.global_position = node.global_position + node.velocity.normalized()*16
 		node.get_parent().add_child(new_spawn)
 	return

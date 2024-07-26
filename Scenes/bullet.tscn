@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://due005wd5mds1"]
+[gd_scene load_steps=6 format=3 uid="uid://due005wd5mds1"]
 
 [ext_resource type="Script" path="res://Script/bullet.gd" id="1_3wtfd"]
+[ext_resource type="PackedScene" uid="uid://bb4w1ufi08xqd" path="res://Scenes/glow.tscn" id="3_18114"]
 [ext_resource type="Texture2D" uid="uid://hew7f4n70osj" path="res://assets/bullet.png" id="3_fgnrg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uahuj"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_emcm8"]
 radius = 32.249
@@ -10,6 +13,7 @@ radius = 32.249
 modulate = Color(4, 4, 4, 1)
 z_index = 7
 z_as_relative = false
+material = SubResource("ShaderMaterial_uahuj")
 scale = Vector2(0.15, 0.15)
 collision_layer = 8
 collision_mask = 32
@@ -25,6 +29,10 @@ shape = SubResource("CircleShape2D_emcm8")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Glow" parent="." instance=ExtResource("3_18114")]
+z_index = 9
+z_as_relative = false
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

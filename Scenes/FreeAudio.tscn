@@ -5,7 +5,6 @@
 
 [node name="FreeAudio" type="AudioStreamPlayer"]
 stream = ExtResource("1_cyhb2")
-volume_db = 10.0
 script = ExtResource("2_tqciq")
 
 [connection signal="finished" from="." to="." method="_on_finished"]

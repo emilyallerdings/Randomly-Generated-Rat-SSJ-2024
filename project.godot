@@ -13,7 +13,8 @@ config_version=5
 config/name="ChaosShooty"
 run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://assets/icon.svg"
+config/icon="res://icon.ico"
+config/windows_native_icon="res://icon.ico"
 
 [autoload]
 
@@ -24,12 +25,12 @@ DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 
 [display]
 
-window/size/viewport_width=960
-window/size/viewport_height=512
+window/size/viewport_width=896
+window/size/viewport_height=448
 window/size/resizable=false
 window/size/extend_to_title=true
-window/size/window_width_override=1920
-window/size/window_height_override=1080
+window/size/window_width_override=1792
+window/size/window_height_override=896
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_height"
 window/stretch/scale_mode="integer"
@@ -110,7 +111,11 @@ common/physics_ticks_per_second=144
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 renderer/rendering_method.web="forward_plus"
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality=0
 textures/default_filters/use_nearest_mipmap_filter=true
 textures/decals/filter=0
 textures/light_projectors/filter=0

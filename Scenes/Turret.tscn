@@ -1,12 +1,13 @@
-[gd_scene load_steps=33 format=3 uid="uid://cn62f1xmvas4c"]
+[gd_scene load_steps=34 format=3 uid="uid://cn62f1xmvas4c"]
 
 [ext_resource type="Texture2D" uid="uid://c8w7rx7yy4bud" path="res://assets/scienceteam/turret.png" id="1_iogmx"]
 [ext_resource type="Script" path="res://Script/Turret.gd" id="1_nvgu0"]
 [ext_resource type="Shader" path="res://Shaders/flash.gdshader" id="2_65jb8"]
 [ext_resource type="Texture2D" uid="uid://4jrqrplkegay" path="res://assets/scienceteam/eye.png" id="3_xnfml"]
-[ext_resource type="AudioStream" uid="uid://dgctmryo8pp5s" path="res://assets/metal_hit.ogg" id="6_nl611"]
+[ext_resource type="PackedScene" uid="uid://bb4w1ufi08xqd" path="res://Scenes/glow.tscn" id="5_50w0r"]
 [ext_resource type="PackedScene" uid="uid://dfflp6qo7salu" path="res://Scenes/HitBox.tscn" id="6_vxfct"]
-[ext_resource type="Texture2D" uid="uid://ch62clanjogfk" path="res://assets/scienceteam/blood_particle.png" id="7_g0pia"]
+[ext_resource type="PackedScene" uid="uid://che34s7uicd6m" path="res://smoke_particles.tscn" id="7_irimr"]
+[ext_resource type="AudioStream" uid="uid://tk8qwrv7t6im" path="res://assets/metal_hit2.ogg" id="8_jr041"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fkg0p"]
 radius = 200.0
@@ -102,7 +103,7 @@ size = Vector2(55, 52)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4xteg"]
 size = Vector2(65, 101)
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q2nm6"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_o3585"]
 resource_local_to_scene = true
 particles_animation = true
 particles_anim_h_frames = 11
@@ -144,7 +145,7 @@ point_count = 6
 [sub_resource type="CurveTexture" id="CurveTexture_u0bqm"]
 curve = SubResource("Curve_urupa")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uqq8k"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_00att"]
 resource_local_to_scene = true
 lifetime_randomness = 0.4
 particle_flag_disable_z = true
@@ -219,11 +220,14 @@ z_as_relative = false
 position = Vector2(0, -43)
 texture = ExtResource("3_xnfml")
 
-[node name="ShootTimer" type="Timer" parent="."]
+[node name="Glow" parent="EYE" instance=ExtResource("5_50w0r")]
+modulate = Color(0.784314, 0, 0, 1)
+self_modulate = Color(0.156863, 0.156863, 0.156863, 0.52549)
+z_index = 9
+z_as_relative = false
+scale = Vector2(0.3, 0.3)
 
-[node name="Hit" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("6_nl611")
-volume_db = 5.0
+[node name="ShootTimer" type="Timer" parent="."]
 
 [node name="Hitbox" parent="." instance=ExtResource("6_vxfct")]
 collision_layer = 64
@@ -233,21 +237,14 @@ collision_mask = 256
 position = Vector2(-0.5, 13.5)
 shape = SubResource("RectangleShape2D_4xteg")
 
-[node name="SmokeParticles" type="GPUParticles2D" parent="."]
-z_index = 10
-material = SubResource("CanvasItemMaterial_q2nm6")
-emitting = false
-amount = 100
-process_material = SubResource("ParticleProcessMaterial_uqq8k")
-texture = ExtResource("7_g0pia")
-lifetime = 4.0
-one_shot = true
-speed_scale = 2.0
-explosiveness = 0.9
-randomness = 0.2
-fixed_fps = 144
+[node name="SmokeParticles" parent="." instance=ExtResource("7_irimr")]
+material = SubResource("CanvasItemMaterial_o3585")
+process_material = SubResource("ParticleProcessMaterial_00att")
+
+[node name="Hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_jr041")
+volume_db = -10.0
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="frame_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_frame_changed"]
 [connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]
-[connection signal="finished" from="SmokeParticles" to="SmokeParticles" method="_on_finished"]

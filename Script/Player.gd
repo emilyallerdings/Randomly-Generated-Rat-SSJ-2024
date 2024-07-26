@@ -23,8 +23,10 @@ var bulletparams:BulletParams = BulletParams.new()
 #const BELCH_EFFECT = preload("res://Scenes/BelchEffect.tscn")
 
 const BELCH_EFFECT = preload("res://resources/BelchEffect.tres")
-
+const spit_sound = preload("res://assets/spit.ogg")
 const BULLET = preload("res://Scenes/bullet.tscn")
+const zap_sound = preload("res://assets/untitled.ogg")
+const player_hurt_sound = preload("res://assets/player_hit.ogg")
 
 @onready var ENERGY_COLOR = $Energy_Bar/EnergyBar.color
 
@@ -113,10 +115,10 @@ func update_values():
 	if shoot_type == 2:
 		#$CanvasLayer/Stats/Weapon.text = "Weapon: Rocket Barf"
 		#$CanvasLayer/Stats/WeaponDesc.text = rocket_desc
-		bullet_dmg = 15 * damage_coeff
-		charge_rate = 50 * charge_coeff
+		bullet_dmg = 10 * damage_coeff
+		charge_rate = 20 + 15*(charge_coeff)
 		traction = 8 / traction_coeff
-		bulletparams.size = 1.0
+		bulletparams.size = 1.1
 		bulletparams.speed = 700
 		bulletparams.color = ACID_COLOR
 		
@@ -164,16 +166,17 @@ func update_values():
 	if feet_type == 2:
 		#$CanvasLayer/Stats/Feet.text = "Feet: Thruster Feet"
 		#$CanvasLayer/Stats/FeetDesc.text = reverse_feet_desc
-		knockback_factor = -1.0	
-		bullet_dmg * 0.95
+		bullet_dmg -= 4
+		knockback_factor = -1.2
+		charge_rate * 0.9
 		
 	if feet_type == 3:
 		#$CanvasLayer/Stats/Feet.text = "Feet: Acid Storing Legs"
 		#$CanvasLayer/Stats/FeetDesc.text = feet_acid_desc
-		knockback_factor = 1.05
+		knockback_factor = 1.1
 		traction * 0.95
-		bullet_dmg * 1.05
-		charge_rate * 1.05
+		bullet_dmg * 1.2
+		charge_rate * 1.1
 		bulletparams.size += 0.1
 		bulletparams.spread += 5
 
@@ -203,13 +206,13 @@ func _ready():
 	#anim_sprite.play("default")
 	
 	coeffs.resize(6)
-	coeffs.fill(0.9)
+	coeffs.fill(0.95)
 	
 	for index1 in range(0, coeffs.size()):
 		var val = randf_range(-0.2, 0.2)
 		var index2 = randi_range(0, coeffs.size()-1)
 		
-		while(index1 == index2 || coeffs[index2] - abs(val) < 0.5 || coeffs[index1] - abs(val) < 0.5 ):
+		while(index1 == index2 || coeffs[index2] - abs(val) < 0.75 || coeffs[index1] - abs(val) < 0.75 ):
 			val = randf_range(-0.2, 0.2)
 			index2 = randi_range(0, coeffs.size()-1)
 			
@@ -241,6 +244,8 @@ func _ready():
 	#update_weapon(3)
 	update_stomach(randi_range(1,2))
 	update_feet(randi_range(1,3))
+
+
 	$Hitbox.set_collision_layer_value(8, true)
 	return
 
@@ -365,30 +370,30 @@ func shoot():
 		shoot_anim()
 		
 		if shoot_type == 3:
-			var num_bullets = 3 + 2*round(damage_coeff*bulletparams.damage/20)
+			var num_bullets = 3 + 2*round(damage_coeff*bulletparams.damage/30)
 			#shooter, collision_layer, velocity, num, spread, speed_vary, slow_down
 			BulletManager.even_shotgun(self, BulletManager.CollisionLayer.ENEMY, vec_to_crosshair,
-			 num_bullets,  num_bullets * 5 + 5*bulletparams.size,
+			 num_bullets,  num_bullets * 2 + 4*bulletparams.size,
 			 0, 0, bulletparams)
 			#DebugDraw2D.line(self.position, self.position + (vec_to_crosshair * self.global_position.distance_to(crosshair.global_position)), Color.RED, 3, 0.5)
 			extra_velocity += vec_to_crosshair * -1 * 2000 * knockback_factor
-			get_tree().root.add_child(FreeAudio.new(preload("res://assets/spit.ogg")))
+			get_tree().root.add_child(FreeAudio.new(spit_sound, -3))
 			#$Hitbox.set_collision_layer_value(8, false)
 			#$Hurtbox.set_collision_mask_value(7, true)
 		
 		
 		if shoot_type == 2:
 			BulletManager.shotgun(self, BulletManager.CollisionLayer.ENEMY, vec_to_crosshair*1500,
-			 10, 35, 500, 0, bulletparams)
+			 5, 30, 500, 0, bulletparams)
 			#DebugDraw2D.line(self.position, self.position + (vec_to_crosshair * self.global_position.distance_to(crosshair.global_position)), Color.RED, 3, 0.5)
-			extra_velocity += vec_to_crosshair * -1 * 3000 * knockback_factor
-			get_tree().root.add_child(FreeAudio.new(preload("res://assets/spit.ogg")))
+			extra_velocity += vec_to_crosshair * -1 * 3500 * knockback_factor * bullet_speed_coeff
+			get_tree().root.add_child(FreeAudio.new(spit_sound, -3))
 			$Hitbox.set_collision_layer_value(8, false)
 			$Hurtbox.set_collision_mask_value(7, true)
 			
 		elif shoot_type == 1:
 			#shooter, collision_layer, velocity, num, delay, bulletparams:BulletParams = null
-			get_tree().root.add_child(FreeAudio.new(preload("res://assets/untitled.ogg")))
+			get_tree().root.add_child(FreeAudio.new(zap_sound, -3))
 			
 			BulletManager.shoot_line(self, BulletManager.CollisionLayer.ENEMY,
 			vec_to_crosshair*1500,
@@ -435,7 +440,7 @@ func _on_hurtbox_body_entered(body):
 	
 	var hitevent:HitEvent = HitEvent.new()
 	
-	hitevent.damage = damage_coeff * 50.0 * (extra_velocity.length() / 700.0)
+	hitevent.damage = (60*damage_coeff + (bullet_dmg*4)) * clamp((extra_velocity.length() / 5000.0),0.1, 3.0)
 	hitevent.knockback_dir = extra_velocity.normalized()
 	hitevent.knockback_strength = extra_velocity.length() / 100.0
 	
@@ -460,7 +465,7 @@ func hit(hitevent):
 	
 	var num = hearts_container.remove_heart()
 	$Flash/ColorRect/AnimationPlayer.play("flash")
-	get_tree().root.add_child(FreeAudio.new(preload("res://assets/player_hit.ogg")))
+	get_tree().root.add_child(FreeAudio.new(player_hurt_sound, 0))
 	if num <= 0:
 		on_death.emit()
 
@@ -500,7 +505,7 @@ func upgrade_picked(type):
 		2:
 			speed_coeff += 0.1
 		3:
-			charge_coeff += 0.1
+			charge_coeff += 0.05
 		4:
 			traction_coeff += 0.1
 		5:

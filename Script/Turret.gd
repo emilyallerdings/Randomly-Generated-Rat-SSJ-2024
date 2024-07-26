@@ -13,18 +13,23 @@ var built = false
 
 var type = 1
 
-var shoot_delay = 1
+var shoot_delay = 1.0
 var bullet_speed = 300
 
 var bullet_speed_mod = 1.0
 var build_speed:float = 2.0
 
-var line_amount = 2
-var line_delay = 0.5
+var line_amount = 1.5
+var line_delay = 0.6
 
-var max_repair = 300
+var max_repair = 45
 
 var shotgun_amount = 3
+
+const turret_shoot = preload("res://assets/turret_shoot.ogg")
+const metal_hit = preload("res://assets/metal_hit2.ogg")
+const explode_no_power = preload("res://assets/explode_no_power.ogg")
+const explode_power = preload("res://assets/explode_power.ogg")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,14 +37,24 @@ func _ready():
 	$AnimatedSprite2D.frame = 0
 	
 	type = randi_range(0, 2)
-	health = health + 40*Globals.difficulty
-	max_repair = Globals.difficulty * 0.1 * max_repair
+	health = health + 7*Globals.difficulty
+	max_repair = randf_range(0.95, 1.05) * (Globals.difficulty * 7 + max_repair + health)
 	build_speed = clamp((build_speed + Globals.difficulty*0.05) * randf_range(0.95, 1.05),1,10.0) 
-	bullet_speed_mod = (bullet_speed_mod + Globals.difficulty*0.04) * randf_range(0.95, 1.05)
+	bullet_speed_mod = (bullet_speed_mod + Globals.difficulty*0.03) * randf_range(0.95, 1.05)
 	
-	shotgun_amount = (3 + floor(Globals.difficulty * 0.25) * 2.0)
+	shotgun_amount = (3 + (floor(Globals.difficulty * 0.10) * 2.0) )
+	line_amount = (1 + floor(Globals.difficulty * 0.35)) + randi_range(0, 2)
+	line_delay = clamp((line_delay - Globals.difficulty*0.005) * randf_range(0.80, 1.2), 0.01, 2.0) / line_amount
 	
+	shoot_delay = clamp((shoot_delay - Globals.difficulty*0.006) * randf_range(0.90, 1.1), 0.1, 3.0)
 	
+	if type == Type.SHOTGUN:
+		shoot_delay *= 2.2
+	if type == Type.LINE:
+		shoot_delay *= 1.5
+	if type == Type.SINGLE:
+		shoot_delay *= 1.3
+		
 	$AnimatedSprite2D.speed_scale = build_speed
 	$Hitbox.set_collision_layer_value(7, false)
 	
@@ -59,7 +74,7 @@ func build(scientist):
 	animated_sprite_2d.visible = true
 	animated_sprite_2d.play("build")
 	$Hitbox.set_collision_layer_value(7, true)
-	collision_shape_2d.disabled = false
+	#collision_shape_2d.disabled = false
 
 func _on_animated_sprite_2d_animation_finished():
 	$EYE.visible = true
@@ -92,7 +107,6 @@ func _on_shoot_timer_timeout():
 			return
 		Type.SHOTGUN:
 			print("SHOTGUN")
-			$ShootTimer.wait_time = 2.0
 			shoot_shotgun()
 			return
 
@@ -156,20 +170,20 @@ func handle_damage(damage):
 			return
 			
 		if built:
-			var dedsound = FreeAudio.new(preload("res://assets/explode_power.ogg"))
+			var dedsound = FreeAudio.new(explode_power, -2)
 			dedsound.pitch_scale = 1.0 + randf_range(-0.1, 0.1)
 			get_parent().add_child(dedsound)
 			get_parent().enemy_removed(position)
 			killed = true
 		else:
 			if $AnimatedSprite2D.frame > 0:
-				var dedsound = FreeAudio.new(preload("res://assets/explode_no_power.ogg"))
+				var dedsound = FreeAudio.new(explode_no_power, -6)
 				dedsound.pitch_scale = 1.0 + randf_range(-0.1, 0.1)
 				get_parent().add_child(dedsound)
 				killed = true
 				
 		$SmokeParticles.emitting = true
-		collision_shape_2d.disabled = true
+		#collision_shape_2d.disabled = true
 		$EYE.visible = false
 		$AnimatedSprite2D.stop()
 		$AnimatedSprite2D.frame = 0
@@ -181,10 +195,11 @@ func handle_damage(damage):
 		
 		return
 		
-	var hitsound = FreeAudio.new(preload("res://assets/metal_hit2.ogg"))
-	hitsound.pitch_scale = 0.82 + randf_range(-0.1, 0.1)
+	#var hitsound = FreeAudio.new(metal_hit, -5)
+	$Hit.pitch_scale = 0.82 + randf_range(-0.1, 0.1)
+	$Hit.play(0)
 	$AnimatedSprite2D/AnimationPlayer.play("flash")
-	get_parent().add_child(hitsound)
+	#get_parent().add_child(hitsound)
 
 func is_broken():
 	if health <= 0:
@@ -192,12 +207,12 @@ func is_broken():
 	return false
 
 func on_shoot():
-	var hitsound = FreeAudio.new(preload("res://assets/turret_shoot.ogg"))
+	var hitsound = FreeAudio.new(turret_shoot, -5)
 	#hitsound.pitch_scale = 0.2
 	get_parent().add_child(hitsound)
 	return
 
 func _on_animated_sprite_2d_frame_changed():
 	if health > 0:
-		health += (max_repair/4.0)
+		health += clamp((max_repair/4.0), 0, max_repair)
 	pass # Replace with function body.

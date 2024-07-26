@@ -14,12 +14,12 @@ void fragment() {
 		vec2 center = vec2(0.5,0.5);
         vec4 color = texture(screen_texture, SCREEN_UV, 0.0);
 		float circSize = fadeWidth;
-		float dist = distance (UV, center);
+		float dist = distance (UV, center) + (sin(TIME*0.8) * 0.04) + 0.01;
 		vec4 finalColor = color;
 
-
+//+ (sin(TIME*100.0) * 10.0)
 		float transition = smoothstep(circSize, 0.0, dist) ;
-		finalColor = mix( vec4(0,0,0,190.0 + (sin(TIME) * 25.0) ), color, (transition + (random(UV) - 0.5)/(randRes + (sin(TIME) * 10.0)) ));
+		finalColor = mix( vec4(0,0,0,255.0 - (sin(TIME*0.8) * 10.0)), color, (transition + (random(UV) - 0.5)/(randRes + 0.0) ));
 
 		COLOR = finalColor;
 

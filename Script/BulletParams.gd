@@ -11,4 +11,3 @@ var death_effect:DeathEffect = null
 var color
 
 #var knockback_factor = 1.0
-

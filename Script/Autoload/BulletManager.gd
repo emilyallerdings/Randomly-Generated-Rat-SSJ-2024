@@ -17,5 +17,3 @@ func even_shotgun(shooter, collision_layer, velocity, num, spread, speed_vary, s
 	if is_instance_valid(main):	
 		#print(bulletparams.speed)
 		main.even_shotgun(shooter, collision_layer, velocity, num, spread, speed_vary, slow_down, bulletparams)
-
-

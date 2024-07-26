@@ -12,14 +12,14 @@ glow_enabled = true
 glow_levels/1 = 2.48
 glow_levels/2 = 1.0
 glow_intensity = 2.0
-glow_hdr_threshold = 1.1
+glow_hdr_threshold = 0.9
 glow_hdr_luminance_cap = 101.65
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bbpwa"]
 shader = ExtResource("5_1wjj8")
-shader_parameter/fadeWidth = 3.8
-shader_parameter/randRes = 50.0
-shader_parameter/baseAdd = 0.1
+shader_parameter/fadeWidth = 0.85
+shader_parameter/randRes = 20.0
+shader_parameter/baseAdd = -0.5
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_e5dyd")
@@ -33,6 +33,7 @@ environment = SubResource("Environment_k3g3d")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_mdi78")
+volume_db = -8.0
 autoplay = true
 
 [node name="Control" type="Control" parent="."]

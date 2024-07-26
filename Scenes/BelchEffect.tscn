@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://wokhi8ra41qt"]
+[gd_scene load_steps=8 format=3 uid="uid://wokhi8ra41qt"]
 
 [ext_resource type="Script" path="res://Script/BelchEffect.gd" id="1_3xw0p"]
 [ext_resource type="Texture2D" uid="uid://bwy6tl73oe5m0" path="res://assets/belch_aoe.png" id="1_4iaq8"]
+[ext_resource type="PackedScene" uid="uid://bb4w1ufi08xqd" path="res://Scenes/glow.tscn" id="3_pbe74"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n301f"]
 radius = 12.13
@@ -53,3 +54,9 @@ shape = SubResource("CapsuleShape2D_n301f")
 libraries = {
 "": SubResource("AnimationLibrary_e2ro0")
 }
+
+[node name="Glow" parent="." instance=ExtResource("3_pbe74")]
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 0.329412)
+position = Vector2(2, 7)
+scale = Vector2(-0.135, 0.065)

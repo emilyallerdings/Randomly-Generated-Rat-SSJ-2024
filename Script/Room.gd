@@ -12,6 +12,8 @@ const LOCK_DOOR = preload("res://Scenes/LockDoor.tscn")
 const GRADIENT = preload("res://Scenes/gradient.tscn")
 const UPGRADE = preload("res://Scenes/Upgrade.tscn")
 
+const black_texture = preload("res://assets/black.png")
+
 var connected_rooms = {
 	Vector2.UP: null,
 	Vector2.RIGHT: null,
@@ -61,7 +63,7 @@ func _ready():
 	create_room(width_in_tiles, height_in_tiles)
 	
 	color_rect = Sprite2D.new()
-	color_rect.texture = preload("res://assets/black.png")
+	color_rect.texture = black_texture
 	black.add_child(color_rect)
 	
 	color_rect.visible = true
@@ -99,13 +101,13 @@ func _ready():
 		enter_room()
 		
 	
-	shape.disabled = false
+	#shape.disabled = false
 
 func room_cleared():
 	if is_final_room:
 		$ExitDoor.visible = true
 		$ExitDoor.play("open")
-		Globals.difficulty /= 2.0
+		Globals.difficulty -= 2.0
 	
 	if cleared:
 		return
@@ -139,7 +141,7 @@ func get_middle_offset():
 	return middle
 
 func fill_room():
-	var num_enemies = randi_range(1 + floor(Globals.difficulty * 0.25), 2 + floor(Globals.difficulty * 0.5))
+	var num_enemies = randi_range(1 + floor(Globals.difficulty * 0.30), 1 + floor(Globals.difficulty * 0.40))
 	for num in range(num_enemies):
 		
 		var n_enemy = SCIENTIST.instantiate()
@@ -153,7 +155,7 @@ func fill_room():
 func enter_room():
 	if is_final_room:
 		self.modulate = Color(0.8,0.2,0.2)
-		Globals.difficulty *= 2.0
+		Globals.difficulty += 2.0
 		$ExitDoor.position = get_middle_offset() + Vector2(32,32)
 		$ExitDoor.visible = true
 		
@@ -203,6 +205,8 @@ func lerp_player_into_room(dir, pos):
 		await get_tree().process_frame 
 
 func create_room(width, height):
+	
+				
 	for x in range(width):
 		for y in range(height):
 			
@@ -221,6 +225,9 @@ func create_room(width, height):
 				$TileMap.set_cell(0, Vector2(x,y), 7, Vector2.ZERO, 0)	
 				if y == height-1:
 					$TileMap.set_cell(0, Vector2(x,y), 9, Vector2.ZERO, 1)
+					
+					
+
 	return
 
 func get_middle():
@@ -251,6 +258,7 @@ func connect_room2(room, direction):
 			ngrad.position = middle*64 - Vector2(0, (floor(height_in_tiles/2) + 1)*64) + Vector2(32,32)
 			ngrad.rotate(deg_to_rad(90))
 			black.add_child(ngrad)
+			ngrad.scale.x = 1.5
 
 			$TileMap.set_cell(0, door_pos, 10, Vector2(0,0))
 			$TileMap.set_cell(0, door_pos - Vector2(-1,1), 8, Vector2.ZERO, 2)
@@ -272,7 +280,7 @@ func connect_room2(room, direction):
 			ngrad.position = middle*64 + Vector2(0, (floor(height_in_tiles/2) + 1)*64) + Vector2(32,32)
 			ngrad.rotate(deg_to_rad(-90))
 			black.add_child(ngrad)
-			
+			ngrad.scale.x = 1.5
 			$TileMap.set_cell(0, door_pos, 10, Vector2(0,0))
 			$TileMap.set_cell(0, door_pos + Vector2(1,0), 8, Vector2.ZERO, 2)
 			$TileMap.set_cell(0, door_pos + Vector2(-1,0), 8, Vector2.ZERO, 1)

@@ -181,7 +181,6 @@ debug_path_custom_line_width = 2.0
 
 [node name="Hit" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_npt1f")
-volume_db = 5.0
 pitch_scale = 0.82
 
 [node name="Label" type="Label" parent="."]

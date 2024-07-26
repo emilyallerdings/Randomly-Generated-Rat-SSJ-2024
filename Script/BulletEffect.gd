@@ -8,6 +8,7 @@ func _ready():
 func start(dir, color):
 	self.direction = dir
 	self.color_ramp.set_color(0, color)
+	await get_tree().create_timer(randf_range(0.01,0.03)).timeout
 	self.emitting = true
 
 

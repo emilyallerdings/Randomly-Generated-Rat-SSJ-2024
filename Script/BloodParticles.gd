@@ -7,11 +7,6 @@ func _ready():
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-
 func bigger(amount):
 	self.process_material.scale_min = self.process_material.scale_min * amount
 	self.process_material.scale_max = self.process_material.scale_max * amount

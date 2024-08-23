@@ -1,0 +1,1 @@
+My submission for the Slow Summer Jam 2024 - Random Generation Game Jam. Was made in 2 weeks though mostly made within the last 3 days due to personal issues. Go play the game on my itch page here https://unconscious-a.itch.io/randomly-generated-rat
